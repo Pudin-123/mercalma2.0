@@ -24,7 +24,7 @@ cd mercado
 
 # Run migrations
 echo "Running database migrations..."
-python manage.py autofix_db
+python manage.py migrate --noinput
 
 # Collect static files
 echo "Collecting static files..."
