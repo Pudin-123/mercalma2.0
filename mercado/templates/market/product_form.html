@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ title|default:"Nuevo producto" }} • MERCALMA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+      <h3 class="fw-bold mb-4 text-primary">{{ title|default:"Publicar producto" }}</h3>
+
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <div class="row g-4">
+          <div class="col-lg-8">
+            {% for field in form %}
+              <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                  {{ field.label }}
+                  {% if field.field.required %}
+                    <span class="text-danger">*</span>
+                  {% endif %}
+                </label>
+
+                {% if field.name == 'category' %}
+                  <div class="input-group">
+                    {{ field }}
+                    <button type="button" class="btn btn-outline-primary rounded-end-3" id="toggle-new-category" title="Nueva categoría">
+                      <i class="bi bi-plus-lg"></i>
+                    </button>
+                    <input type="text" id="new-category-input" class="form-control" placeholder="Nueva categoría...">
+                    <button type="button" id="save-new-category" class="btn btn-success">
+                      <i class="bi bi-check2"></i> Guardar
+                    </button>
+                  </div>
+                {% else %}
+                  {{ field }}
+                {% endif %}
+
+                {% if field.errors %}
+                  {% for error in field.errors %}
+                    <div class="text-danger small mt-1">{{ error }}</div>
+                  {% endfor %}
+                {% endif %}
+                {% if field.help_text %}
+                  <small class="text-muted">{{ field.help_text }}</small>
+                {% endif %}
+              </div>
+            {% endfor %}
+
+            <div class="d-flex gap-3 mt-4">
+              <button type="submit" class="btn btn-success rounded-pill px-4 fw-semibold">
+                <i class="bi bi-save2 me-2"></i>{{ submit_label|default:"Guardar producto" }}
+              </button>
+              <a href="{% url 'market:product_list' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="bi bi-x-circle me-2"></i>Cancelar
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const categorySelect = document.querySelector('select[name="category"]');
+  const newCategoryInput = document.getElementById('new-category-input');
+  const toggleButton = document.getElementById('toggle-new-category');
+  const saveButton = document.getElementById('save-new-category');
+  let isAddingNew = false;
+
+  function showAlert(type, message, container) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show shadow-sm`;
+    alertDiv.role = 'alert';
+    alertDiv.innerHTML = `
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    container.insertBefore(alertDiv, container.firstChild);
+    setTimeout(() => {
+      alertDiv.classList.remove('show');
+      setTimeout(() => alertDiv.remove(), 200);
+    }, 4000);
+  }
+
+  toggleButton.addEventListener('click', () => {
+    isAddingNew = !isAddingNew;
+    newCategoryInput.style.display = isAddingNew ? 'block' : 'none';
+    categorySelect.style.display = isAddingNew ? 'none' : 'block';
+    saveButton.style.display = isAddingNew ? 'inline-block' : 'none';
+    toggleButton.innerHTML = isAddingNew ? '<i class="bi bi-x-lg"></i>' : '<i class="bi bi-plus-lg"></i>';
+    toggleButton.classList.toggle('btn-outline-danger');
+    toggleButton.classList.toggle('btn-outline-primary');
+    if (isAddingNew) newCategoryInput.focus();
+  });
+
+  function createCategory(name) {
+    return fetch('{% url "categorias:create_category" %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({ name })
+    }).then(res => res.json());
+  }
+
+  saveButton.addEventListener('click', async () => {
+    const name = newCategoryInput.value.trim();
+    const container = document.querySelector('.container');
+    if (!name) return showAlert('warning', 'Ingrese un nombre de categoría.', container);
+    try {
+      const data = await createCategory(name);
+      if (data.status === 'success') {
+        const option = new Option(data.category.name, data.category.id, true, true);
+        categorySelect.add(option);
+        toggleButton.click();
+        showAlert('success', 'Categoría creada exitosamente.', container);
+      } else {
+        throw new Error(data.message || 'Error al crear categoría.');
+      }
+    } catch (err) {
+      showAlert('danger', err.message, document.querySelector('.container'));
+    }
+  });
+});
+</script>
+{% endblock %}
+

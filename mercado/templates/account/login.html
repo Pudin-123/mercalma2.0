@@ -1,0 +1,25 @@
+{% extends "account/base_auth.html" %}
+{% load socialaccount %}
+
+{% block auth_content %}
+<h3 class="text-center mb-4 fw-bold text-dark">Iniciar sesión</h3>
+
+<form method="post" action="{% url 'account_login' %}" novalidate>
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+  <div class="alert alert-danger small">
+    {{ form.non_field_errors }}
+  </div>
+  {% endif %}
+
+  {{ form.as_p }}
+
+  <button type="submit" class="btn w-100 text-white fw-semibold mt-3 py-2"
+    style="background-color: var(--primary-color, #BFA5FF); border: none; border-radius: .6rem;">
+    Ingresar
+  </button>
+  </a>
+  </small>
+  </div>
+  {% endblock %}

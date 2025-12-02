@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Notificaciones{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <!-- Header con titulo y contador -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1>📬 Notificaciones</h1>
+                    {% if unread_count > 0 %}
+                        <small class="text-muted">
+                            Tienes <span class="badge bg-danger">{{ unread_count }}</span> notificaciones sin leer
+                        </small>
+                    {% else %}
+                        <small class="text-muted">Todas tus notificaciones están leídas</small>
+                    {% endif %}
+                </div>
+                
+                <!-- Botón marcar todas como leídas -->
+                {% if unread_count > 0 %}
+                    <button class="btn btn-sm btn-outline-primary" id="mark-all-read">
+                        Marcar todas como leídas
+                    </button>
+                {% endif %}
+            </div>
+
+            <!-- Lista de notificaciones -->
+            {% if notifications %}
+                <div class="notification-list">
+                    {% for notification in notifications %}
+                        <div class="notification-item card mb-3 {% if not notification.read %}border-primary border-2{% endif %}" 
+                             data-notification-id="{{ notification.id }}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <!-- Ícono según tipo -->
+                                        <div class="mb-2">
+                                            {% if notification.notification_type == 'message' %}
+                                                <span class="badge bg-info">💬 Mensaje</span>
+                                            {% elif notification.notification_type == 'sale' %}
+                                                <span class="badge bg-success">💰 Venta</span>
+                                            {% elif notification.notification_type == 'purchase' %}
+                                                <span class="badge bg-warning">🛒 Compra</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">📢 Notificación</span>
+                                            {% endif %}
+                                            
+                                            {% if not notification.read %}
+                                                <span class="badge bg-danger">Nuevo</span>
+                                            {% endif %}
+                                        </div>
+
+                                        <!-- Título -->
+                                        <h5 class="card-title mb-2">{{ notification.title }}</h5>
+
+                                        <!-- Mensaje -->
+                                        <p class="card-text text-muted mb-3">{{ notification.message }}</p>
+
+                                        <!-- Fecha -->
+                                        <small class="text-muted">
+                                            {{ notification.created_at|date:"d/m/Y H:i" }}
+                                        </small>
+                                    </div>
+
+                                    <!-- Botones de acción -->
+                                    <div class="btn-group-vertical ms-2" role="group">
+                                        {% if notification.get_absolute_url != '#' %}
+                                            <a href="{{ notification.get_absolute_url }}" 
+                                               class="btn btn-sm btn-outline-primary"
+                                               onclick="markAsRead({{ notification.id }})">
+                                                Ver más →
+                                            </a>
+                                        {% endif %}
+                                        
+                                        {% if not notification.read %}
+                                            <button class="btn btn-sm btn-outline-secondary" 
+                                                    onclick="markAsRead({{ notification.id }})">
+                                                Marcar como leída
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Paginación si hay muchas notificaciones -->
+                <div class="mt-4">
+                    <small class="text-muted">
+                        Mostrando las últimas 50 notificaciones
+                    </small>
+                </div>
+            {% else %}
+                <!-- Estado vacío -->
+                <div class="alert alert-info text-center py-5">
+                    <h5>📭 No hay notificaciones</h5>
+                    <p class="text-muted mb-0">Cuando recibas mensajes, ventas o compras, aparecerán aquí.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Estilos personalizados -->
+<style>
+    .notification-item {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .notification-item:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .notification-item.unread {
+        background-color: #f0f7ff;
+    }
+
+    .badge {
+        font-size: 0.85rem;
+    }
+
+    .notification-list .card {
+        border-left: 4px solid #e9ecef;
+    }
+
+    .notification-list .card.border-primary {
+        border-left-color: #0d6efd !important;
+    }
+
+    .btn-group-vertical .btn {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.85rem;
+    }
+</style>
+
+<!-- Script para marcar como leída -->
+<script>
+    function markAsRead(notificationId) {
+        fetch(`/notifications/mark-read/${notificationId}/`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                // Remover el indicador de "Nuevo"
+                const item = document.querySelector(`[data-notification-id="${notificationId}"]`);
+                if (item) {
+                    item.classList.remove('border-2');
+                    item.classList.remove('border-primary');
+                }
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Marcar todas como leídas
+    const markAllReadBtn = document.getElementById('mark-all-read');
+    if (markAllReadBtn) {
+        markAllReadBtn.addEventListener('click', function() {
+            fetch('/notifications/mark-all-read/', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    location.reload();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    }
+</script>
+{% endblock %}

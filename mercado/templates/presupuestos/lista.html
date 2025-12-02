@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Listado de Presupuestos{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold mb-4 text-center">📋 Listado de Presupuestos</h2>
+
+  <!-- 🟢 Estado del Bot de Telegram -->
+  {% if ultimo_log %}
+  <div class="alert alert-success shadow-sm d-flex align-items-center justify-content-between">
+    <div>
+      ✅ <strong>El servidor recibió mensajes desde Telegram.</strong>
+    </div>
+    <span class="badge bg-success">Conectado</span>
+  </div>
+
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body bg-light">
+      <h5 class="card-title mb-3">📩 Último mensaje recibido</h5>
+      <ul class="list-unstyled mb-0">
+        <li><strong>👤 Usuario:</strong> {{ ultimo_log.username }} <span class="text-muted">(ID: {{ ultimo_log.chat_id }})</span></li>
+        <li><strong>💬 Mensaje:</strong> {{ ultimo_log.mensaje }}</li>
+        <li><strong>⏰ Recibido:</strong> {{ ultimo_log.recibido_en|date:"d/m/Y H:i" }}</li>
+      </ul>
+    </div>
+  </div>
+  {% else %}
+  <div class="alert alert-warning shadow-sm">
+    ⚠️ Aún no llegaron mensajes desde Telegram.
+  </div>
+  {% endif %}
+
+  <!-- 📦 Lista de presupuestos -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white fw-semibold">
+      📦 Presupuestos registrados
+    </div>
+    <div class="card-body p-0">
+      {% if presupuestos %}
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Producto</th>
+            <th scope="col">Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in presupuestos %}
+          <tr>
+            <td>{{ p.producto }}</td>
+            <td>{{ p.email }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="p-4 text-center text-muted">
+        📭 No hay presupuestos registrados aún.
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

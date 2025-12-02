@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Nuevo producto • MERCALMA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+      <div class="card shadow-sm border-0 rounded-4" style="background-color: #f8f9ff;">
+        <div class="card-body p-4">
+          <h2 class="mb-4 text-center fw-bold text-dark">
+            🪴 Crear nuevo producto
+          </h2>
+
+          <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="d-flex justify-content-center gap-3 mt-4">
+              <button type="submit" class="btn text-white fw-semibold px-4"
+                      style="background-color: #8c9eff;">
+                <i class="bi bi-save me-2"></i> Guardar producto
+              </button>
+
+              <a href="{% url 'market:product_list' %}" class="btn btn-outline-secondary px-4">
+                <i class="bi bi-x-circle me-2"></i> Cancelar
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

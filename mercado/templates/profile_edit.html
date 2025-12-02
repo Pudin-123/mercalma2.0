@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Editar perfil{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h3 class="fw-bold text-center mb-4 text-dark">✏️ Editar perfil</h3>
+
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          <!-- Avatar actual + vista previa -->
+          <div class="text-center mb-4">
+            {% if profile.avatar %}
+              <img id="avatarPreview" 
+                   src="{{ profile.avatar.url }}" 
+                   alt="Avatar actual" 
+                   class="rounded-circle shadow-sm"
+                   style="width: 120px; height: 120px; object-fit: cover;">
+            {% else %}
+              <div id="avatarPlaceholder" 
+                   class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto shadow-sm"
+                   style="width: 120px; height: 120px;">
+                <span class="fs-1 text-muted">👤</span>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Campo de subida de imagen -->
+          <div class="mb-3">
+            <label for="id_avatar" class="form-label fw-semibold">Cambiar foto</label>
+            {{ form.avatar }}
+          </div>
+
+          <!-- Bio -->
+          <div class="mb-3">
+            <label for="id_bio" class="form-label fw-semibold">Biografía</label>
+            {{ form.bio }}
+          </div>
+
+          <div class="d-grid gap-2">
+            <button type="submit" 
+                    class="btn text-white fw-semibold"
+                    style="background-color: var(--primary-color, #BFA5FF); border: none;">
+              💾 Guardar cambios
+            </button>
+            <a href="{% url 'profile' %}" class="btn btn-outline-secondary">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Vista previa del avatar -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const input = document.getElementById("id_avatar");
+  const preview = document.getElementById("avatarPreview");
+  const placeholder = document.getElementById("avatarPlaceholder");
+
+  if (input) {
+    input.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          if (preview) {
+            preview.src = e.target.result;
+          } else {
+            // Crear imagen si no existía antes
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.className = "rounded-circle shadow-sm";
+            img.style = "width: 120px; height: 120px; object-fit: cover;";
+            placeholder.replaceWith(img);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

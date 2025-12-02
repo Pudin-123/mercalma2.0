@@ -1,0 +1,27 @@
+:root {
+  --lavanda: #c9b6e4;
+  --lavanda-clara: #e7dcf8;
+  --celeste: #a8d8f0;
+  --celeste-claro: #d8f3fc;
+  --gris-suave: #f8f9fb;
+  --texto-oscuro: #2e2e3a;
+  --texto-suave: #5f5f72;
+  --blanco: #ffffff;
+  --sombra: rgba(0,0,0,0.08);
+}
+[data-theme="dark"] {
+  --lavanda: #7f6cae;
+  --lavanda-clara: #a693d8;
+  --celeste: #6fb8d6;
+  --celeste-claro: #9fd8ef;
+  --gris-suave: #121217;
+  --texto-oscuro: #f1f1f5;
+  --texto-suave: #c6c6d1;
+  --blanco: #1e1e27;
+  --sombra: rgba(255,255,255,0.03);
+}
+body { background: var(--gris-suave); color: var(--texto-oscuro); font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial; }
+.navbar { background: linear-gradient(90deg,var(--lavanda),var(--celeste)); box-shadow: 0 2px 12px var(--sombra); }
+.btn-primary { background: var(--celeste); color: var(--texto-oscuro); border: none; }
+.card { border-radius: 12px; box-shadow: 0 6px 18px var(--sombra); }
+.theme-toggle { background: transparent; border: 1px solid rgba(255,255,255,0.2); border-radius:50%; width:40px; height:40px; color:var(--blanco); }

@@ -1,0 +1,87 @@
+
+/* Mercado V2 - Pastel Moderno Responsive */
+
+:root{
+  --primary:#a3c4f3;
+  --secondary:#ffb3c6;
+  --success:#b9fbc0;
+  --bg:#f9fafc;
+  --text:#333;
+  --radius:0.85rem;
+  --muted:#6c757d;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+html,body{height:100%;background:var(--bg);font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,Arial; color:var(--text);}
+
+/* Navbar */
+.navbar{
+  background: linear-gradient(90deg, rgba(163,196,243,1) 0%, rgba(255,179,198,1) 100%) !important;
+  box-shadow: 0 2px 12px rgba(14,30,37,0.06);
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+.navbar-brand{font-weight:700;color:#fff !important;font-size:1.25rem}
+.nav-link{color:rgba(255,255,255,0.95) !important}
+.nav-link:hover{color:#fff !important; text-decoration:underline}
+
+/* Footer */
+.site-footer{
+  background: linear-gradient(90deg, rgba(163,196,243,1) 0%, rgba(255,179,198,1) 100%);
+  color:#fff;
+  padding:1.25rem 0;
+  margin-top:2rem;
+  border-top-left-radius:0.5rem;
+  border-top-right-radius:0.5rem;
+}
+
+/* Cards */
+.card{
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(14,30,37,0.06);
+  overflow:hidden;
+  transition: transform .18s ease, box-shadow .18s ease;
+  background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(250,250,250,0.98));
+}
+.card:hover{ transform: translateY(-6px); box-shadow:0 12px 28px rgba(14,30,37,0.09);}
+.card img{ height:180px; object-fit:cover; width:100%; display:block;}
+
+/* Card grid responsive */
+.card-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px,1fr));
+  gap:1.25rem;
+  align-items:start;
+}
+
+/* Badges */
+.product-badge{
+  position:absolute; left:12px; top:12px; padding:.35rem .6rem; border-radius:999px;
+  background:rgba(255,255,255,0.9); color:var(--text); font-weight:600; box-shadow:0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Buttons */
+.btn{ border-radius: .6rem; font-weight:600; }
+.btn-primary{ background:var(--primary); border-color:var(--primary); color:#fff; }
+.btn-primary:hover{ background:var(--secondary); border-color:var(--secondary); color:#fff; }
+.btn-outline-primary{ color:var(--primary); border-color:var(--primary); }
+.btn-outline-primary:hover{ background:var(--primary); color:#fff; }
+
+/* Toasts container */
+.toast-container{ position: fixed; bottom: 1rem; right: 1rem; z-index: 2000; }
+
+/* Scroll to top */
+#scrollTopBtn{
+  position: fixed; right: 1rem; bottom: 4.2rem; border-radius:50%; width:44px; height:44px;
+  display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  background:linear-gradient(180deg,var(--primary),var(--secondary)); color:#fff; border:none;
+}
+#scrollTopBtn:hover{ transform: scale(1.05); cursor:pointer; }
+
+/* Small screens adjustments */
+@media (max-width:576px){
+  .card img{ height:140px; }
+  .navbar-brand{ font-size:1.1rem; }
+  main.container{ padding-left:0.75rem; padding-right:0.75rem; }
+}

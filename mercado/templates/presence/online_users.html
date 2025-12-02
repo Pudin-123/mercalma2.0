@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Usuarios conectados{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body">
+      <h2 class="fw-bold text-center mb-4 text-primary">👥 Usuarios conectados</h2>
+
+      {% if active %}
+      <ul class="list-group list-group-flush">
+        {% for ua in active %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <span class="fw-semibold">{{ ua.user.username }}</span>
+            <small class="text-muted ms-2">Activo hace {{ ua.last_seen|timesince }}</small>
+          </div>
+          <span class="badge bg-success px-3 py-2">🟢 En línea</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <div class="alert alert-info text-center mt-3 rounded-3 shadow-sm">
+        <p class="mb-0">Ningún usuario está conectado actualmente 💭</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

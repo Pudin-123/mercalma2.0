@@ -1,0 +1,153 @@
+{% extends "account/base_auth.html" %}
+{% load i18n %}
+{% load socialaccount %}
+
+{% block auth_content %}
+<div class="auth-form-container">
+  <!-- Encabezado -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold text-dark mb-2" style="font-size: 1.5rem;">
+      ✨ Completar tu perfil
+    </h2>
+    <p class="text-muted" style="font-size: 0.95rem;">
+      Estamos casi listos. Necesitamos algunos datos más para tu cuenta con 
+      <strong style="color: var(--primary-color, #BFA5FF);">{{ provider.name }}</strong>
+    </p>
+  </div>
+
+  <!-- Errores generales -->
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+      <strong>Oops!</strong>
+      {% for error in form.non_field_errors %}
+        <div>{{ error }}</div>
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+  {% endif %}
+
+  <!-- Formulario -->
+  <form method="post" action="{% url 'socialaccount_signup' %}" class="needs-validation">
+    {% csrf_token %}
+    
+    <!-- Email -->
+    <div class="mb-3">
+      <label for="{{ form.email.id_for_label }}" class="form-label">
+        📧 Email
+      </label>
+      <input 
+        type="email" 
+        class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+        id="{{ form.email.id_for_label }}"
+        name="email"
+        value="{{ form.email.value|default:'' }}"
+        placeholder="tu@email.com"
+        required>
+      {% if form.email.errors %}
+        <div class="invalid-feedback">
+          {{ form.email.errors.0 }}
+        </div>
+      {% endif %}
+      <small class="text-muted d-block mt-1">Usaremos este email para tu cuenta</small>
+    </div>
+
+    <!-- Username -->
+    {% if form.username %}
+      <div class="mb-3">
+        <label for="{{ form.username.id_for_label }}" class="form-label">
+          👤 Nombre de usuario
+        </label>
+        <input 
+          type="text" 
+          class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+          id="{{ form.username.id_for_label }}"
+          name="username"
+          value="{{ form.username.value|default:'' }}"
+          placeholder="mi_usuario"
+          required>
+        {% if form.username.errors %}
+          <div class="invalid-feedback">
+            {{ form.username.errors.0 }}
+          </div>
+        {% endif %}
+        <small class="text-muted d-block mt-1">Solo letras, números y guiones</small>
+      </div>
+    {% endif %}
+
+    <!-- First Name -->
+    {% if form.first_name %}
+      <div class="mb-3">
+        <label for="{{ form.first_name.id_for_label }}" class="form-label">
+          📝 Nombre
+        </label>
+        <input 
+          type="text" 
+          class="form-control {% if form.first_name.errors %}is-invalid{% endif %}"
+          id="{{ form.first_name.id_for_label }}"
+          name="first_name"
+          value="{{ form.first_name.value|default:'' }}"
+          placeholder="Tu nombre">
+        {% if form.first_name.errors %}
+          <div class="invalid-feedback">
+            {{ form.first_name.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Last Name -->
+    {% if form.last_name %}
+      <div class="mb-3">
+        <label for="{{ form.last_name.id_for_label }}" class="form-label">
+          📝 Apellido
+        </label>
+        <input 
+          type="text" 
+          class="form-control {% if form.last_name.errors %}is-invalid{% endif %}"
+          id="{{ form.last_name.id_for_label }}"
+          name="last_name"
+          value="{{ form.last_name.value|default:'' }}"
+          placeholder="Tu apellido">
+        {% if form.last_name.errors %}
+          <div class="invalid-feedback">
+            {{ form.last_name.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Botón de envío -->
+    <button type="submit" class="btn btn-primary-auth mt-2">
+      ✓ Crear cuenta
+    </button>
+  </form>
+
+  <!-- Términos y condiciones -->
+  <div class="text-center mt-3">
+    <small class="text-muted" style="font-size: 0.85rem;">
+      Al crear tu cuenta, aceptas nuestros 
+      <a href="#" class="auth-link">términos y condiciones</a>
+    </small>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider-text my-4">
+    <span>¿Necesitás ayuda?</span>
+  </div>
+
+  <!-- Links de ayuda -->
+  <div class="text-center">
+    <small class="text-muted d-block mb-2">
+      <a href="{% url 'account_login' %}" class="auth-link">
+        Volver al inicio de sesión
+      </a>
+    </small>
+    <small class="text-muted d-block">
+      <a href="#" class="auth-link">
+        Contactar soporte
+      </a>
+    </small>
+  </div>
+</div>
+
+{% endblock %}

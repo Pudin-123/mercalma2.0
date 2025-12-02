@@ -1,0 +1,75 @@
+/* ===== CATEGORIES NAV ===== */
+.categories-nav {
+  background: var(--muted);
+  border-radius: 1rem;
+  margin: 1.25rem auto;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  transition: background 0.3s ease;
+}
+
+/* Contenedor flexible */
+.categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.9rem;
+}
+
+/* Botones individuales */
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text);
+  text-decoration: none;
+  padding: 0.6rem 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  min-width: 90px;
+}
+
+.category-item i {
+  font-size: 1.25rem;
+  margin-bottom: 0.3rem;
+  color: var(--primary);
+  transition: color 0.3s ease;
+}
+
+/* Hover y active */
+.category-item:hover {
+  background: var(--secondary);
+  transform: translateY(-3px);
+  color: var(--text-dark);
+}
+
+.category-item:hover i {
+  color: var(--text-dark);
+}
+
+.category-item.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 10px rgba(191, 165, 255, 0.3);
+}
+
+/* Modo oscuro */
+[data-theme="dark"] .categories-nav {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .category-item {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f3f3f3;
+}
+
+[data-theme="dark"] .category-item:hover {
+  background: var(--primary);
+  color: white;
+}
+

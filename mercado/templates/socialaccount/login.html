@@ -1,0 +1,70 @@
+{% extends "account/base_auth.html" %}
+{% load i18n %}
+
+{% block auth_content %}
+<div class="auth-form-container">
+  <!-- Encabezado -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold text-dark mb-2" style="font-size: 1.3rem;">
+      🔐 Confirmar conexión
+    </h2>
+    <p class="text-muted mb-0" style="font-size: 0.95rem;">
+      Estás a punto de continuar con <strong style="color: var(--primary-color, #BFA5FF);">{{ provider.name }}</strong>
+    </p>
+  </div>
+
+  <!-- Información del proveedor -->
+  <div class="alert" style="background-color: var(--muted, #F3F2FF); border: 1px solid var(--primary-color, #BFA5FF); border-radius: 0.75rem; padding: 1rem;">
+    <div class="text-center">
+      <small class="text-muted d-block mb-2">Vinculando cuenta con</small>
+      <strong style="font-size: 1.1rem; color: var(--text-dark, #2E2E3A);">
+        {{ provider.name }}
+      </strong>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <form method="post" class="needs-validation">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        {% for error in form.non_field_errors %}
+          <div>{{ error }}</div>
+        {% endfor %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endif %}
+
+    <!-- Botón de confirmación -->
+    <button type="submit" class="btn btn-primary-auth mb-2">
+      ✓ Continuar con {{ provider.name }}
+    </button>
+
+    <!-- Botón de cancelación -->
+    <a href="{% url 'account_login' %}" class="btn w-100 text-muted fw-semibold" 
+       style="background-color: var(--muted, #F3F2FF); border: 1px solid #ddd; border-radius: 0.75rem; padding: 0.75rem; font-size: 1rem; text-decoration: none;">
+      ← Cancelar
+    </a>
+  </form>
+
+  <!-- Divider -->
+  <div class="divider-text my-4">
+    <span>Privacidad</span>
+  </div>
+
+  <!-- Información de privacidad -->
+  <small class="text-muted d-block text-center" style="font-size: 0.85rem;">
+    No compartiremos tu contraseña. Solo usaremos tu información según nuestros
+    <a href="#" class="auth-link">términos de privacidad</a>.
+  </small>
+
+  <!-- Link de ayuda -->
+  <div class="text-center mt-4">
+    <small class="text-muted">
+      <a href="{% url 'account_login' %}" class="auth-link">Volver al inicio de sesión</a>
+    </small>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview - Template Social Auth</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #BFA5FF;
+            --secondary-color: #BEE9D6;
+            --accent-color: #FFD6E0;
+            --background-light: #FFFDFC;
+            --muted: #F3F2FF;
+            --text-dark: #2E2E3A;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            background: linear-gradient(135deg, rgba(191, 165, 255, 0.1) 0%, rgba(190, 233, 214, 0.1) 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .preview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .preview-header h1 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .preview-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .preview-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 24px rgba(46, 46, 58, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .preview-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .preview-label {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .preview-content {
+            padding: 2rem;
+        }
+
+        .mock-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 12px rgba(191, 165, 255, 0.2);
+            padding: 2rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .mock-form-group {
+            margin-bottom: 1rem;
+        }
+
+        .mock-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mock-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: var(--muted);
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .mock-input:focus {
+            outline: none;
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(191, 165, 255, 0.25);
+        }
+
+        .mock-button {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .mock-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(191, 165, 255, 0.3);
+        }
+
+        .mock-text-center {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 1rem;
+        }
+
+        .mock-text-center a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .color-swatch {
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-primary {
+            background-color: var(--primary-color);
+        }
+
+        .color-secondary {
+            background-color: var(--secondary-color);
+        }
+
+        .color-accent {
+            background-color: var(--accent-color);
+            color: var(--text-dark);
+            text-shadow: none;
+        }
+
+        .color-muted {
+            background-color: var(--muted);
+            color: var(--text-dark);
+            text-shadow: none;
+            border: 1px solid #e0e0e0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            background: var(--muted);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+        }
+
+        .feature-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background: #2E2E3A;
+            color: #F3F2FF;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .preview-row {
+                grid-template-columns: 1fr;
+            }
+
+            .color-palette {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <!-- Encabezado -->
+        <div class="preview-header">
+            <h1>✨ Preview: Template Social Auth Personalizado</h1>
+            <p>Rediseño moderno de formularios de autenticación OAuth en MERCALMA</p>
+        </div>
+
+        <!-- Preview 1: Signup Form -->
+        <div class="preview-row">
+            <div class="preview-card">
+                <div class="preview-label">Signup Post-OAuth</div>
+                <div class="preview-content">
+                    <div class="mock-card">
+                        <div style="text-align: center; margin-bottom: 1.5rem;">
+                            <h3 style="font-size: 1.3rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.5rem;">
+                                ✨ Completar tu perfil
+                            </h3>
+                            <p style="color: var(--text-light); font-size: 0.95rem; margin: 0;">
+                                Necesitamos algunos datos más para tu cuenta
+                            </p>
+                        </div>
+
+                        <div class="mock-form-group">
+                            <label class="mock-label">📧 Email</label>
+                            <input type="email" class="mock-input" placeholder="tu@email.com" value="usuario@example.com">
+                        </div>
+
+                        <div class="mock-form-group">
+                            <label class="mock-label">👤 Nombre de usuario</label>
+                            <input type="text" class="mock-input" placeholder="mi_usuario">
+                        </div>
+
+                        <div class="mock-form-group">
+                            <label class="mock-label">📝 Nombre</label>
+                            <input type="text" class="mock-input" placeholder="Tu nombre">
+                        </div>
+
+                        <button class="mock-button">✓ Crear cuenta</button>
+
+                        <div class="mock-text-center">
+                            <small>Al crear tu cuenta aceptas nuestros <a href="#">términos</a></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview 2: Login Confirmation -->
+            <div class="preview-card">
+                <div class="preview-label">Confirmación Social Login</div>
+                <div class="preview-content">
+                    <div class="mock-card">
+                        <div style="text-align: center; margin-bottom: 1.5rem;">
+                            <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.5rem;">
+                                🔐 Confirmar conexión
+                            </h3>
+                            <p style="color: var(--text-light); font-size: 0.95rem; margin: 0;">
+                                Estás a punto de continuar con
+                            </p>
+                        </div>
+
+                        <div style="background: var(--muted); border: 1px solid var(--primary-color); border-radius: 0.75rem; padding: 1rem; text-align: center; margin-bottom: 1rem;">
+                            <small style="color: var(--text-light); display: block; margin-bottom: 0.25rem;">Vinculando cuenta con</small>
+                            <strong style="font-size: 1.1rem; color: var(--text-dark);">Google</strong>
+                        </div>
+
+                        <button class="mock-button">✓ Continuar con Google</button>
+                        <button style="background-color: var(--muted); color: var(--text-dark); border: 1px solid #ddd;" class="mock-button">← Cancelar</button>
+
+                        <div class="mock-text-center" style="margin-top: 1.5rem;">
+                            <small>No compartiremos tu contraseña</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paleta de Colores -->
+        <div class="preview-card" style="margin-bottom: 2rem;">
+            <div class="preview-label">Paleta de Colores</div>
+            <div class="preview-content">
+                <div class="color-palette">
+                    <div style="text-align: center;">
+                        <div class="color-swatch color-primary" style="height: 80px; display: flex; align-items: center; justify-content: center;">Primary</div>
+                        <small style="color: var(--text-light); display: block; margin-top: 0.5rem;">#BFA5FF</small>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="color-swatch color-secondary" style="height: 80px; display: flex; align-items: center; justify-content: center;">Secondary</div>
+                        <small style="color: var(--text-light); display: block; margin-top: 0.5rem;">#BEE9D6</small>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="color-swatch color-accent" style="height: 80px; display: flex; align-items: center; justify-content: center;">Accent</div>
+                        <small style="color: var(--text-light); display: block; margin-top: 0.5rem;">#FFD6E0</small>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="color-swatch color-muted" style="height: 80px; display: flex; align-items: center; justify-content: center;">Muted</div>
+                        <small style="color: var(--text-light); display: block; margin-top: 0.5rem;">#F3F2FF</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Características -->
+        <div class="preview-card" style="margin-bottom: 2rem;">
+            <div class="preview-label">Características Principales</div>
+            <div class="preview-content">
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-emoji">✨</div>
+                        <div class="feature-title">Diseño Moderno</div>
+                        <div class="feature-desc">Interfaz actualizada y profesional</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-emoji">📱</div>
+                        <div class="feature-title">Responsive</div>
+                        <div class="feature-desc">Funciona en todos los dispositivos</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-emoji">🎨</div>
+                        <div class="feature-title">Estilo Consistente</div>
+                        <div class="feature-desc">Integrado con la paleta de MERCALMA</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-emoji">✓</div>
+                        <div class="feature-title">Validación Mejorada</div>
+                        <div class="feature-desc">Feedback visual claro</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-emoji">🚀</div>
+                        <div class="feature-title">Transiciones Suaves</div>
+                        <div class="feature-desc">Animaciones de 0.3s</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-emoji">🔒</div>
+                        <div class="feature-title">Seguro</div>
+                        <div class="feature-desc">CSRF protection + validación</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Archivos Modificados -->
+        <div class="preview-card">
+            <div class="preview-label">Archivos Afectados</div>
+            <div class="preview-content">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div>
+                        <h5 style="color: var(--primary-color); margin-bottom: 1rem;">✨ Nuevos</h5>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 0.75rem;">📄 <code>templates/socialaccount/signup.html</code></li>
+                            <li>🎨 <code>static/css/auth-forms.css</code></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 style="color: var(--secondary-color); margin-bottom: 1rem;">✏️ Modificados</h5>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 0.75rem;">📄 <code>templates/base.html</code></li>
+                            <li style="margin-bottom: 0.75rem;">📄 <code>templates/account/base_auth.html</code></li>
+                            <li>📄 <code>templates/socialaccount/login.html</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

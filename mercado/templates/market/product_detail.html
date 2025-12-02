@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ product.title }} • MERCALMA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row g-5 align-items-start">
+    <!-- Imagen del producto -->
+    <div class="col-lg-5 text-center">
+      <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" class="img-fluid rounded-4" alt="{{ product.title }}">
+        {% else %}
+          <div class="bg-light py-5 text-muted">Sin imagen disponible</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Detalles del producto -->
+    <div class="col-lg-7">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <h2 class="fw-bold text-dark">{{ product.title }}</h2>
+        {% if request.user == product.seller %}
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-gear"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'market:edit_product' product.id %}" class="dropdown-item"><i class="bi bi-pencil me-2 text-warning"></i>Editar</a></li>
+              <li><a href="{% url 'market:delete_product' product.id %}" class="dropdown-item text-danger"><i class="bi bi-trash me-2"></i>Eliminar</a></li>
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+
+      <p class="text-muted mb-4">{{ product.description|linebreaks }}</p>
+
+      <h3 class="text-primary fw-bold mb-4">${{ product.price }}</h3>
+
+      {% if request.user != product.seller %}
+      <div class="d-flex flex-wrap gap-3 mb-4">
+        <a href="{% url 'market:add_to_cart' product.id %}" class="btn btn-primary btn-lg rounded-pill px-4">
+          <i class="bi bi-cart-plus me-2"></i>Agregar al carrito
+        </a>
+        <a href="{% url 'simple_chat:start_conversation' product.id %}" class="btn btn-outline-primary btn-lg rounded-pill px-4">
+          <i class="bi bi-chat-dots me-2"></i>Chatear con vendedor
+        </a>
+      </div>
+      {% endif %}
+
+      <div class="border-top pt-3 mt-3">
+        <p class="mb-2"><strong>Categoría:</strong> {{ product.category.name }}</p>
+        <p class="mb-0"><strong>Vendedor:</strong> {{ product.seller.username }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

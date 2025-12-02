@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Productos • MERCALMA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row g-4">
+    <!-- Sidebar de filtros -->
+    <aside class="col-lg-3">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h5 class="fw-semibold mb-3">
+            <i class="bi bi-funnel me-2 text-primary"></i>Filtros
+          </h5>
+          <form id="filter-form" class="needs-validation" novalidate>
+            <!-- Buscar -->
+            <div class="mb-3">
+              <label class="form-label small text-muted fw-semibold">Buscar producto</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+                <input type="text" name="q" id="search-input" value="{{ q }}" class="form-control border-0 shadow-sm" placeholder="Buscar...">
+                <button type="button" class="input-group-text bg-light border-0" id="voice-search-btn" title="Buscar por voz">
+                  <i class="bi bi-mic"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Categoría -->
+            <div class="mb-3">
+              <label class="form-label small text-muted fw-semibold">Categoría</label>
+              <select name="category" class="form-select border-0 shadow-sm">
+                <option value="">Todas las categorías</option>
+                {% for cat in categories %}
+                  <option value="{{ cat.id }}" {% if cat.id|stringformat:"s" == category %}selected{% endif %}>{{ cat.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Rango de precio -->
+            <div class="mb-4">
+              <label class="form-label small text-muted fw-semibold">Rango de precio</label>
+              <div class="d-flex gap-2">
+                <input type="number" name="min_price" value="{{ min_price }}" class="form-control border-0 shadow-sm" placeholder="Mín">
+                <input type="number" name="max_price" value="{{ max_price }}" class="form-control border-0 shadow-sm" placeholder="Máx">
+              </div>
+            </div>
+
+            <!-- Botón aplicar -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary rounded-pill fw-semibold">
+                <i class="bi bi-sliders me-1"></i> Aplicar filtros
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Grid de productos -->
+    <section class="col-lg-9">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold m-0 text-primary">Productos disponibles</h4>
+        {% if q %}
+          <small class="text-muted">Resultados para: “{{ q }}”</small>
+        {% endif %}
+      </div>
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        {% include 'market/_product_cards.html' %}
+      </div>
+
+      <!-- Paginación -->
+      {% if is_paginated %}
+      <nav aria-label="Paginación" class="mt-5">
+        <ul class="pagination justify-content-center">
+          <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+            <a class="page-link rounded-pill px-3" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Anterior</a>
+          </li>
+          <li class="page-item disabled">
+            <span class="page-link border-0 bg-transparent">
+              Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+          </li>
+          <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+            <a class="page-link rounded-pill px-3" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+          </li>
+        </ul>
+      </nav>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/filter.js' %}"></script>
+{% endblock %}

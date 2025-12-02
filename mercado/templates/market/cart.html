@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Tu carrito{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4 fw-bold text-primary">🛒 Carrito de Compras</h2>
+
+  {% if cart.items.all %}
+  <div class="card shadow-sm border-0 rounded-4 mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart.items.all %}
+            <tr>
+              <td>{{ item.product.title }}</td>
+              <td>x{{ item.quantity }}</td>
+              <td><strong>${{ item.subtotal }}</strong></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-end mt-4">
+        <h4 class="fw-bold text-dark">Total: ${{ cart.total }}</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <button id="checkout-btn" class="btn btn-lg text-white fw-semibold px-5 shadow-sm"
+            style="background-color: #8c9eff;">
+      💳 Pagar con Mercado Pago
+    </button>
+  </div>
+
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <script>
+    const mp = new MercadoPago("{{ PUBLIC_KEY }}", { locale: 'es-AR' });
+
+    document.getElementById("checkout-btn").addEventListener("click", () => {
+      fetch("{% url 'market:crear-preferencia-carrito' %}")
+        .then(response => response.json())
+        .then(data => {
+          window.location.href = data.init_point;
+        })
+        .catch(error => {
+          console.error("Error al iniciar el pago:", error);
+          alert("Ocurrió un error al conectar con Mercado Pago.");
+        });
+    });
+  </script>
+
+  {% else %}
+  <div class="alert alert-info text-center mt-4 shadow-sm rounded-3">
+    <p class="mb-2">🛍️ Tu carrito está vacío.</p>
+    <a href="{% url 'market:product_list' %}" class="btn btn-outline-primary">
+      Ver productos
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+

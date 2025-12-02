@@ -1,0 +1,68 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold text-primary" href="{% url 'home' %}">
+      <img src="{% static 'img/logo.svg' %}" alt="Logo" width="28" class="me-2">
+      MERCALMA
+    </a>
+
+    <!-- Barra de búsqueda superior -->
+    <form class="d-flex flex-grow-1 mx-4" action="{% url 'product-list' %}" method="get" style="max-width:600px;">
+      <div class="input-group shadow rounded-pill">
+        <input type="text" name="q" id="navbar-search-input" class="form-control border-0 rounded-start-pill px-4 bg-dark text-light" placeholder="Buscar productos..." aria-label="Buscar productos">
+        <button type="button" class="input-group-text bg-dark border-0 text-light" id="navbar-voice-search-btn" title="Buscar por voz">
+          <i class="bi bi-mic"></i>
+        </button>
+        <button type="submit" class="input-group-text bg-warning border-0 rounded-end-pill" title="Buscar">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </form>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Alternar navegación">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'product-list' %}active{% endif %}" href="{% url 'product-list' %}">
+            🛍️ Productos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">
+            ℹ️ Acerca
+          </a>
+        </li>
+
+        {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{{ user.profile.avatar.url|default_if_none:static('img/default-avatar.png') }}"
+                   alt="Avatar" width="28" height="28" class="rounded-circle me-2 border">
+              {{ user.username }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="{% url 'profile' %}">👤 Mi perfil</a></li>
+              <li><a class="dropdown-item" href="{% url 'edit_profile' %}">✏️ Editar perfil</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}">🚪 Cerrar sesión</a></li>
+            </ul>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="btn btn-outline-primary ms-3 px-3" href="{% url 'account_login' %}">
+              🔑 Iniciar sesión
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Panel de Control{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h1 class="text-center fw-bold mb-5">📊 Panel de Control</h1>
+
+  <div class="row g-4">
+    <!-- 🟢 Último mensaje de Telegram -->
+    <div class="col-md-5">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <span class="fw-semibold">🤖 Actividad del Bot de Telegram</span>
+          <small id="telegram-status" class="text-white-50">actualizando...</small>
+        </div>
+        <div class="card-body bg-light">
+          <div id="ultimo-telegram" class="border rounded bg-white p-3 text-muted small">
+            📩 Esperando mensajes de Telegram...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔹 Lista de presupuestos -->
+    <div class="col-md-7">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+          <span class="fw-semibold">📦 Últimos Presupuestos</span>
+          <a href="{% url 'admin:presupuestos_presupuesto_changelist' %}" class="btn btn-light btn-sm fw-semibold">
+            🛠️ Ver en Admin
+          </a>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Email</th>
+                <th scope="col">Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in presupuestos %}
+              <tr>
+                <td>{{ p.producto }}</td>
+                <td>{{ p.email }}</td>
+                <td class="text-muted">{{ p.creado_en|date:"d/m/Y H:i" }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3" class="text-center text-muted py-4">
+                  📭 Sin presupuestos registrados.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 🔻 Script para actualizar Telegram -->
+<script>
+async function actualizarTelegram() {
+  const statusEl = document.getElementById("telegram-status");
+  const container = document.getElementById("ultimo-telegram");
+
+  try {
+    const resp = await fetch("/api/presupuestos/ultimo-telegram/");
+    if (!resp.ok) throw new Error("Error de red");
+
+    const data = await resp.json();
+    if (data.mensaje) {
+      container.innerHTML = `
+        <div class="fw-semibold text-dark">📩 ${data.username || "Usuario"}:</div>
+        <div class="mb-2">${data.mensaje}</div>
+        <small class="text-muted">⏰ ${data.recibido_en}</small>
+      `;
+      statusEl.textContent = "✅ conectado";
+      statusEl.classList.remove("text-white-50");
+    } else {
+      container.innerHTML = "📭 Sin mensajes aún.";
+      statusEl.textContent = "🕓 esperando...";
+    }
+  } catch (err) {
+    statusEl.textContent = "⚠️ sin conexión";
+    container.innerHTML = "<span class='text-danger'>❌ Error al obtener datos del bot.</span>";
+  }
+}
+
+setInterval(actualizarTelegram, 5000);
+actualizarTelegram();
+</script>
+{% endblock %}

@@ -1,0 +1,413 @@
+/* ==============================
+   Paleta Lavanda + Celeste (Modo claro y oscuro)
+   ============================== */
+
+:root {
+  --lavanda: #c9b6e4;
+  --lavanda-clara: #e7dcf8;
+  --celeste: #a8d8f0;
+  --celeste-claro: #d8f3fc;
+  --gris-suave: #f8f9fb;
+  --texto-oscuro: #2e2e3a;
+  --texto-suave: #5f5f72;
+  --blanco: #ffffff;
+  --sombra: rgba(0, 0, 0, 0.1);
+}
+
+/* MODO OSCURO */
+[data-theme="dark"] {
+  --lavanda: #7f6cae;
+  --lavanda-clara: #a693d8;
+  --celeste: #6fb8d6;
+  --celeste-claro: #9fd8ef;
+  --gris-suave: #1f1f28;
+  --texto-oscuro: #f1f1f5;
+  --texto-suave: #c6c6d1;
+  --blanco: #2c2c39;
+  --sombra: rgba(255, 255, 255, 0.08);
+}
+
+/* ==============================
+   Base general
+   ============================== */
+body {
+  background-color: var(--gris-suave);
+  color: var(--texto-oscuro);
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==============================
+   Navbar
+   ============================== */
+.navbar {
+  background: linear-gradient(90deg, var(--lavanda) 0%, var(--celeste) 100%);
+  box-shadow: 0 2px 6px var(--sombra);
+  transition: background 0.3s;
+}
+.navbar-brand {
+  font-weight: 700;
+  color: var(--blanco) !important;
+}
+.navbar a, .navbar .nav-link {
+  color: var(--blanco) !important;
+  transition: opacity 0.2s;
+}
+.navbar a:hover {
+  opacity: 0.8;
+}
+
+/* ==============================
+   Botones
+   ============================== */
+.btn-primary {
+  background-color: var(--celeste);
+  border: none;
+  color: var(--texto-oscuro);
+  font-weight: 600;
+  transition: 0.2s;
+}
+.btn-primary:hover {
+  background-color: var(--lavanda);
+  color: var(--blanco);
+}
+
+/* Botón de modo oscuro */
+.theme-toggle {
+  background-color: var(--lavanda);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blanco);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.theme-toggle:hover {
+  background-color: var(--celeste);
+}
+
+/* ==============================
+   Cards
+   ============================== */
+.card {
+  border: none;
+  border-radius: 20px;
+  background: var(--blanco);
+  box-shadow: 0 3px 8px var(--sombra);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px var(--sombra);
+}
+.card-title {
+  color: var(--texto-oscuro);
+  font-weight: 600;
+}
+.card-text {
+  color: var(--texto-suave);
+}
+
+/* ==============================
+   Loader
+   ============================== */
+.loader {
+  border: 4px solid var(--celeste-claro);
+  border-top: 4px solid var(--lavanda);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==============================
+   Filtros
+   ============================== */
+form#filter-form {
+  background-color: var(--lavanda-clara);
+  padding: 1rem;
+  border-radius: 15px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px var(--sombra);
+  transition: background-color 0.3s;
+}
+form#filter-form input,
+form#filter-form select {
+  border: 1px solid var(--celeste);
+  border-radius: 10px;
+}
+
+/* ==============================
+   Animaciones
+   ============================== */
+#product-container {
+  animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==== Grid de productos ==== */
+#product-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+/* ==== Card de producto ==== */
+.product-card {
+  background: var(--blanco);
+  border-radius: 15px;
+  box-shadow: 0 2px 6px var(--sombra);
+  text-align: center;
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px var(--sombra);
+}
+
+/* ==== Imagen del producto ==== */
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+}
+
+/* ==== Título y texto ==== */
+.product-card h5, .product-card p {
+  white-space: normal;
+  word-wrap: break-word;
+  font-size: 1rem;
+  color: var(--texto-oscuro);
+}
+
+/* ==============================
+   ESTILO MERCALMA – Tarjetas de productos
+   VERSIÓN v2 - Imágenes reducidas
+   ============================== */
+
+#product-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+/* --- Tarjeta individual --- */
+.product-card {
+  background-color: #FFFFF0;
+  border: 1px solid #DBE4C9;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* --- Imagen --- */
+.product-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  background-color: #DBE4C9;
+}
+
+.product-card-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  background-color: #DBE4C9;
+}
+
+/* --- Sin imagen --- */
+.product-card .no-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  color: #8AA624;
+  background-color: #DBE4C9;
+  font-weight: 500;
+}
+
+/* --- Nombre y descripción --- */
+.product-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #8AA624;
+  margin: 0.8rem 1rem 0.4rem;
+  text-align: center;
+}
+
+.product-desc {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0 1rem 0.8rem;
+  text-align: center;
+  min-height: 3rem;
+}
+
+/* --- Footer --- */
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 1rem 1rem;
+}
+
+/* --- Precio --- */
+.price {
+  font-weight: 700;
+  color: #FEA405;
+}
+
+/* --- Botones --- */
+.actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.btn-view,
+.btn-cart {
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-view {
+  background-color: transparent;
+  color: #8AA624;
+  border: 1px solid #8AA624;
+}
+
+.btn-view:hover {
+  background-color: #8AA624;
+  color: #FFFFF0;
+}
+
+.btn-cart {
+  background-color: #FEA405;
+  color: #FFFFF0;
+}
+
+.btn-cart:hover {
+  background-color: #8AA624;
+}
+
+/* === Tarjetas de producto uniformes y centradas === */
+.product-card {
+  height: 380px; /* 🔧 altura total fija */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--blanco);
+  border-radius: 15px;
+  box-shadow: 0 2px 6px var(--sombra);
+  text-align: center;
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px var(--sombra);
+}
+
+/* ==== Imagen ==== */
+.product-card img,
+.product-card .no-image {
+  width: 100%;
+  height: 160px; /* 🔧 altura fija */
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+}
+
+/* ==== Nombre del producto ==== */
+.product-card h5 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--texto-oscuro);
+  margin: 0.3rem 0;
+  height: 2.4rem; /* máximo 2 líneas */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==== Descripción corta ==== */
+.product-card p {
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+  margin: 0.2rem 0;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* máximo 3 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==== Precio y botón al fondo ==== */
+.product-footer {
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ==== Botón dentro de la card ==== */
+.product-card .btn {
+  background-color: var(--celeste);
+  color: var(--texto-oscuro);
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  transition: 0.2s;
+}
+
+.product-card .btn:hover {
+  background-color: var(--lavanda);
+  color: var(--blanco);
+}
+
+/* ==============================
+   ESTILO MERCADOS – General
+   ============================== */
+/* 🔍 Campos de búsqueda y filtros */
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  border-color: #80bdff;
+}

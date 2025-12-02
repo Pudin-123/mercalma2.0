@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Eliminar producto • MERCALMA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body text-center p-5">
+
+          <div class="mb-3 text-danger fs-1">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+
+          <h3 class="fw-bold mb-3 text-danger">Eliminar producto</h3>
+          <p class="text-muted mb-4">
+            ¿Seguro que querés eliminar <strong>"{{ product.title }}"</strong>?  
+            Esta acción no se puede deshacer.
+          </p>
+
+          <form method="post" class="d-flex justify-content-center gap-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger rounded-pill px-4 fw-semibold">
+              <i class="bi bi-trash3 me-2"></i> Sí, eliminar
+            </button>
+            <a href="{% url 'market:product_list' %}" class="btn btn-outline-secondary rounded-pill px-4">
+              <i class="bi bi-x-circle me-2"></i> Cancelar
+            </a>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+/* Estilos generales */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* Estilos para el modal de categorías */
+.modal-content {
+    border-radius: 0.5rem;
+}
+
+.modal-header {
+    background: linear-gradient(90deg, var(--lavanda-clara), var(--celeste-claro));
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.modal-footer {
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+/* Estilos para el botón de nueva categoría */
+.btn-add-category {
+    white-space: nowrap;
+}
+
+/* Mejoras visuales para el formulario de producto */
+.form-control, .form-select {
+    border-radius: 0.375rem;
+}
+
+.input-group > .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Mensajes de alerta */
+.alert {
+    border-radius: 0.375rem;
+    margin-bottom: 1rem;
+}
+
+/* Estilos para el preview de imagen */
+.image-preview {
+    max-width: 200px;
+    margin-top: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

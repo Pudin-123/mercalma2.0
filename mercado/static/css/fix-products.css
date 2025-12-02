@@ -1,0 +1,35 @@
+/* ===== FIX: Layout de productos ===== */
+
+/* Asegurar que las columnas respeten su tamaño Bootstrap */
+.row.g-4 > [class*='col-'] {
+  display: flex;
+}
+
+/* Las tarjetas deben ocupar todo el ancho dentro de su columna */
+.card {
+  width: 100%;
+  text-align: left;
+  writing-mode: horizontal-tb !important;
+}
+
+/* La imagen debe mantener proporción y rellenar bien */
+.card-img-top {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Texto del título y descripción normal */
+.card-title, .card-text {
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Asegurar que el contenedor principal no esté muy estrecho */
+#product-container, .row.g-4 {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
