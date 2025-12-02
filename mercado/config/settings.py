@@ -11,10 +11,13 @@ SECRET_KEY = env("SECRET_KEY", default="dev-secret-no-usar-en-prod")
 # DEBUG: en producción pasar DEBUG=False vía variable de entorno
 DEBUG = env.bool("DEBUG", default=False)
 # ALLOWED_HOSTS: se puede pasar como CSV en la variable de entorno ALLOWED_HOSTS
+# Valores por defecto soportan Render (.onrender.com), desarrollo local y legacy PyThonanywhere
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[
     '127.0.0.1',
     'localhost',
+    '*.onrender.com',
     '.onrender.com',
+    '*.pythonanywhere.com',
     '.pythonanywhere.com',
     'Pudindechocolate.pythonanywhere.com',
 ])
