@@ -1,15 +1,23 @@
 from pathlib import Path
 import environ
 import os
-from pathlib import Path
 
-env = environ.Env(DEBUG=(bool, True))
-environ.Env.read_env()  # lee .env si existe
+# Leer variables de entorno desde .env si existe
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env("SECRET_KEY", default="dev-secret-no-usar-en-prod")
-DEBUG = env("DEBUG", default=True)
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.onrender.com', '.pythonanywhere.com', 'Pudindechocolate.pythonanywhere.com']
+# DEBUG: en producción pasar DEBUG=False vía variable de entorno
+DEBUG = env.bool("DEBUG", default=False)
+# ALLOWED_HOSTS: se puede pasar como CSV en la variable de entorno ALLOWED_HOSTS
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[
+    '127.0.0.1',
+    'localhost',
+    '.onrender.com',
+    '.pythonanywhere.com',
+    'Pudindechocolate.pythonanywhere.com',
+])
 
 INSTALLED_APPS = [
     'backend_utils',
@@ -125,7 +133,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 import dj_database_url
 
@@ -155,7 +162,6 @@ else:
         }
     }
 
-STATIC_URL = "static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
