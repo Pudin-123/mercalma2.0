@@ -3,7 +3,7 @@ services:
     name: mercalma
     env: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn mercado.config.wsgi:application --bind 0.0.0.0:$PORT --chdir ."
+    startCommand: "cd mercado && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0

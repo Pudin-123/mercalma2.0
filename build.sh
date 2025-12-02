@@ -26,6 +26,10 @@ cd mercado
 echo "Running database migrations..."
 python manage.py migrate --noinput
 
+# Check Django setup
+echo "Django system check..."
+python manage.py check
+
 # Collect static files
 echo "Collecting static files..."
 python manage.py collectstatic --no-input
