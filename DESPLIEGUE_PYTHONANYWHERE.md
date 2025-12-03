@@ -13,7 +13,7 @@ URL Final: https://Pudindechocolate.pythonanywhere.com
 1. Ve a https://www.pythonanywhere.com
 2. Inicia sesión con tu usuario y contraseña
 3. Ve al panel de control
-
+2
 ---
 
 ## PASO 2: Subir tu Proyecto (Elige una opción)

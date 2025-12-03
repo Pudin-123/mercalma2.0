@@ -1,0 +1,4 @@
+/* Placeholder auth styles - customize as needed */
+.auth-bg { background: linear-gradient(180deg,#f8fafc,#eef2f7); }
+.auth-card { width: 420px; padding: 2rem; background: #fff; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+.auth-form-container { padding: 0.5rem; }

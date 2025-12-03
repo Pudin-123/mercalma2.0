@@ -28,3 +28,4 @@ mercado/.env
 SECRET_KEYS_FOR_RENDER.txt
 secret_keys.txt
 generate_secret_key.py
+mercado/staticfiles/

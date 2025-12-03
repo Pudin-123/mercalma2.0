@@ -97,6 +97,11 @@ SOCIALACCOUNT_PROVIDERS = {
 # Auto-conectar después de login social
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+# By default in production we avoid forcing email verification to block signup flows
+# unless the deploy explicitly enables email sending. This prevents worker timeouts
+# caused by unconfigured SMTP providers. To enable verification set the
+# environment variable `ACCOUNT_EMAIL_VERIFICATION` to 'mandatory' or 'optional'.
+ACCOUNT_EMAIL_VERIFICATION = env("ACCOUNT_EMAIL_VERIFICATION", default="none")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -176,13 +181,21 @@ SESSION_COOKIE_AGE = 30 * 60           # 30 minutos (en segundos)
 SESSION_SAVE_EVERY_REQUEST = True      # cada request renueva el tiempo
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'tu_correo@gmail.com'
-EMAIL_HOST_PASSWORD = 'tu_contraseña_o_contraseña_de_aplicación'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# Email configuration: use environment variables in production.
+# By default use the console backend to avoid outbound SMTP blocking
+# (common on some PaaS like Render) while still allowing signup flows
+# to proceed. To enable real SMTP set `EMAIL_BACKEND` and related vars
+# in your Render environment.
+EMAIL_BACKEND = env(
+    "EMAIL_BACKEND",
+    default="django.core.mail.backends.console.EmailBackend",
+)
+EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER or "noreply@localhost")
 
 # Configuración de AutoLogout
 AUTO_LOGOUT_DELAY = 15  # minutos
@@ -213,10 +226,12 @@ STRIPE_WEBHOOK_SECRET = ''
 
 # Static files
 STATIC_URL = '/static/'
+# Reduce to the single top-level `static/` directory to avoid
+# collecting the same filenames from multiple locations which
+# causes the "Found another file with the destination path" warnings.
+# Prefer namespacing per-app static files (e.g. `app_name/static/app_name/...`).
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
-    BASE_DIR / 'market' / 'static',
-    BASE_DIR / 'mercado' / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

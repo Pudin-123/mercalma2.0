@@ -81,7 +81,7 @@
 
         <!-- LOGO -->
         <a class="logo d-flex align-items-center" href="{% url 'core:home' %}">
-            <img src="{% static 'img/logo.png' %}" alt="MERCalma">
+            <img src="{% static 'img/logo.svg' %}" alt="MERCalma">
         </a>
 
         <!-- SEARCH -->
@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
 {% endif %}
 
 {% block extra_js %}
-<script src="{% static 'js/navbar_voice_search.js' %}"></script>
+<script src="{% static 'market/js/navbar_voice_search.js' %}"></script>
 {% endblock %}
 </body>
 </html>
