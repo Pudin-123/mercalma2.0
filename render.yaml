@@ -18,5 +18,5 @@ services:
         value: "django.core.mail.backends.console.EmailBackend"
       - key: ACCOUNT_EMAIL_VERIFICATION
         value: "none"
-    releaseCommand: python mercado/manage.py migrate --noinput
-    preDeployCommand: python mercado/manage.py migrate --noinput
+    releaseCommand: cd mercado && python manage.py run_migrations
+    preDeployCommand: cd mercado && python manage.py run_migrations
