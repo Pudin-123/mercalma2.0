@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: mercalma
+    env: python
+    plan: free
+    buildCommand: pip install -r mercado/requirements.txt && python mercado/manage.py collectstatic --noinput
+    startCommand: gunicorn -w 4 -b 0.0.0.0:$PORT mercado.config.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        scope: PROJECT
+      - key: SECRET_KEY
+        scope: PROJECT
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "*.onrender.com"
+      - key: EMAIL_BACKEND
+        value: "django.core.mail.backends.console.EmailBackend"
+      - key: ACCOUNT_EMAIL_VERIFICATION
+        value: "none"
+    releaseCommand: python mercado/manage.py migrate --noinput
+    preDeployCommand: python mercado/manage.py migrate --noinput
