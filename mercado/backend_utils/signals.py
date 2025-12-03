@@ -1,10 +1,17 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.db import ProgrammingError, OperationalError
 from market.models import Product, CartItem
 from .models import ActionLog
 
+# Temporarily disable signals until migrations are applied
+ENABLE_ACTION_LOG = False  # Set to True once backend_utils.ActionLog table exists
+
 def safe_log_action(user, action, object_repr, extra=None):
-    """Safely log actions; skip if table doesn't exist yet."""
+    """Safely log actions; skip only if table doesn't exist (migration not applied)."""
+    if not ENABLE_ACTION_LOG:
+        return
+    
     try:
         ActionLog.objects.create(
             user=user if getattr(user, 'is_authenticated', False) else None,
@@ -12,8 +19,9 @@ def safe_log_action(user, action, object_repr, extra=None):
             object_repr=object_repr,
             extra=extra
         )
-    except Exception as e:
-        # Silently fail if ActionLog table doesn't exist (migrations not applied)
+    except (ProgrammingError, OperationalError):
+        # Table doesn't exist yet; migrations not applied
+        # Safe to ignore - will work once migrations run
         pass
 
 @receiver(post_save, sender=Product)
